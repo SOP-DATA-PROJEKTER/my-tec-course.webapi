@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using my_tec_course.webapi.Interfaces;
+using my_tec_course.webapi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,16 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+// add repository injection
+
+builder.Services.AddScoped<IUserReflectionRepository, UserReflectionRepository>();
+builder.Services.AddScoped<IMilestoneRepository, MilestoneRepository>();
+builder.Services.AddScoped<IEducationTypeRepository, EducationTypeRepository>();
+builder.Services.AddScoped<IEducationRepository, EducationRepository>();
+builder.Services.AddScoped<ICourseSubjectRepository, CourseSubectRepository>();
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+
 
 
 
