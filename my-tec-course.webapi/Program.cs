@@ -8,13 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // database context
 
-// SQL Server database from appsettings.Development.json
+// SQL Server database from appsettings.Development.json & Datacontext
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 
 // Add services to the container.
+
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
