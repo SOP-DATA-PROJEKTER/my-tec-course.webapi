@@ -1,4 +1,4 @@
-﻿namespace my_tec_course.webapi.Interfaces
+﻿namespace my_tec_course.webapi.Interfaces.Repositories
 {
     public interface IMilestoneRepository
     {
