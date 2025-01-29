@@ -7,22 +7,21 @@ namespace my_tec_course.webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CourseController : ControllerBase
+    public class MilestoneController : ControllerBase
     {
-        private readonly ICourseService _courseService;
+        private readonly IMilestoneService _milestoneService;
 
-        public CourseController(ICourseService courseService)
+        public MilestoneController(IMilestoneService milestoneService)
         {
-            _courseService = courseService;
+            _milestoneService = milestoneService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCoursesAsync()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                var courses = await _courseService.GetAllCoursesAsync();
-                return Ok(courses);
+                return Ok(await _milestoneService.GetAllAsync());
             }
             catch (Exception ex)
             {
@@ -31,11 +30,11 @@ namespace my_tec_course.webapi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCourseByIdAsync(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                return Ok(await _courseService.GetCourseByIdAsync(id));
+                return Ok(await _milestoneService.GetByIdAsync(id));
             }
             catch (Exception ex)
             {
@@ -44,11 +43,11 @@ namespace my_tec_course.webapi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCourseAsync([FromBody] Course course)
+        public async Task<IActionResult> Create([FromBody] Milestone milestone)
         {
             try
             {
-                return Ok(await _courseService.CreateCourseAsync(course));
+                return Ok(await _milestoneService.CreateAsync(milestone));
             }
             catch (Exception ex)
             {
@@ -57,12 +56,11 @@ namespace my_tec_course.webapi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCourseAsync([FromBody] Course course)
+        public async Task<IActionResult> Update([FromBody] Milestone milestone)
         {
             try
             {
-                var updatedCourse = await _courseService.UpdateCourseAsync(course);
-                return Ok(updatedCourse);
+                return Ok(await _milestoneService.UpdateAsync(milestone));
             }
             catch (Exception ex)
             {

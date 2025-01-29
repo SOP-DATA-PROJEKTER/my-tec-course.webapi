@@ -7,22 +7,21 @@ namespace my_tec_course.webapi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CourseController : ControllerBase
+    public class EducationController : ControllerBase
     {
-        private readonly ICourseService _courseService;
+        private readonly IEducationService _educationService;
 
-        public CourseController(ICourseService courseService)
+        public EducationController(IEducationService educationService)
         {
-            _courseService = courseService;
+            _educationService = educationService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCoursesAsync()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                var courses = await _courseService.GetAllCoursesAsync();
-                return Ok(courses);
+                return Ok(await _educationService.GetAllAsync());
             }
             catch (Exception ex)
             {
@@ -31,11 +30,11 @@ namespace my_tec_course.webapi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCourseByIdAsync(int id)
+        public async Task<IActionResult> Get(int id)
         {
             try
             {
-                return Ok(await _courseService.GetCourseByIdAsync(id));
+                return Ok(await _educationService.GetByIdAsync(id));
             }
             catch (Exception ex)
             {
@@ -44,11 +43,11 @@ namespace my_tec_course.webapi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCourseAsync([FromBody] Course course)
+        public async Task<IActionResult> Post([FromBody] Education education)
         {
             try
             {
-                return Ok(await _courseService.CreateCourseAsync(course));
+                return Ok(await _educationService.CreateAsync(education));
             }
             catch (Exception ex)
             {
@@ -57,12 +56,25 @@ namespace my_tec_course.webapi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCourseAsync([FromBody] Course course)
+        public async Task<IActionResult> Put([FromBody] Education education)
         {
             try
             {
-                var updatedCourse = await _courseService.UpdateCourseAsync(course);
-                return Ok(updatedCourse);
+                return Ok(await _educationService.UpdateAsync(education));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _educationService.DeleteAsync(id);
+                return Ok();
             }
             catch (Exception ex)
             {
