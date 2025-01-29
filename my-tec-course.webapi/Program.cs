@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using my_tec_course.webapi.Interfaces;
+using my_tec_course.webapi.Interfaces.Repositories;
 using my_tec_course.webapi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
