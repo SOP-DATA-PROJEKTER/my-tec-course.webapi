@@ -6,6 +6,5 @@
         public string name { get; set; }
         public List<Education> educations { get; set; }
 
-
     }
 }
