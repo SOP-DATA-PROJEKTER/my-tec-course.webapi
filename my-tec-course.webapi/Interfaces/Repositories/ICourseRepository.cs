@@ -1,6 +1,8 @@
-﻿namespace my_tec_course.webapi.Interfaces.Repositories
+﻿using my_tec_course.webapi.Models;
+
+namespace my_tec_course.webapi.Interfaces.Repositories
 {
-    public interface ICourseRepository
+    public interface ICourseRepository : ICrudMethods<Course>
     {
     }
 }

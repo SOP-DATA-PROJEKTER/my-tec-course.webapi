@@ -4,7 +4,7 @@ using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Repositories
 {
-    public class MilestoneRepository : IMilestoneRepository, ICrudMethods<Milestone>
+    public class MilestoneRepository : IMilestoneRepository
     {
         private readonly ApplicationDbContext _context;
         public MilestoneRepository(ApplicationDbContext context)

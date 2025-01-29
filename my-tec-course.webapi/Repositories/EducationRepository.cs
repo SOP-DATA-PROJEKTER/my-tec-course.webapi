@@ -4,7 +4,7 @@ using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Repositories
 {
-    public class EducationRepository : IEducationRepository, ICrudMethods<Education>
+    public class EducationRepository : IEducationRepository
     {
         private readonly ApplicationDbContext _context;
         public EducationRepository(ApplicationDbContext context)
