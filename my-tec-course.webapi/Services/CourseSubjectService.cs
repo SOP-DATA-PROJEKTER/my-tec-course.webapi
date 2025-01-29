@@ -29,6 +29,7 @@ namespace my_tec_course.webapi.Services
             {
                 throw new KeyNotFoundException($"CourseSubject with ID: {id} not found.");
             }
+
             return await _courseSubjectRepository.DeleteAsync(id);
         }
 
