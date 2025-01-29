@@ -36,7 +36,9 @@ namespace my_tec_course.webapi.Services
         public async Task<IEnumerable<CourseSubject>> GetAllAsync()
         {
             return await _courseSubjectRepository.GetAllAsync();
+           
         }
+
 
         public async Task<CourseSubject> GetByIdAsync(int id)
         {
@@ -63,6 +65,11 @@ namespace my_tec_course.webapi.Services
             }
 
             return await _courseSubjectRepository.UpdateAsync(entity);
+        }
+
+        Task ICourseSubjectService.GetAllCourseSubjectsAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
