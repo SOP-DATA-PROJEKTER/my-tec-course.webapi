@@ -2,7 +2,7 @@
 
 namespace my_tec_course.webapi.Interfaces.Services
 {
-    public interface ICourseService : IGenericCrudService<Course>
+    public interface IEducationService : IGenericCrudService<Education>
     {
     }
 }

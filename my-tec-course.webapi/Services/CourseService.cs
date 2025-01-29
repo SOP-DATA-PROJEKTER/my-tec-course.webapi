@@ -1,9 +1,10 @@
 ﻿using my_tec_course.webapi.Interfaces.Repositories;
+using my_tec_course.webapi.Interfaces.Services;
 using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Services
 {
-    public class CourseService
+    public class CourseService: ICourseService
     {
         private readonly ICourseRepository _courseRepository;
         public CourseService(ICourseRepository courseRepository)
@@ -26,12 +27,7 @@ namespace my_tec_course.webapi.Services
             return await _courseRepository.CreateAsync(course);
         }
 
-        public Task<bool> DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> DeleteCourseAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             if(_courseRepository.GetByIdAsync(id) == null)
             {
@@ -41,33 +37,20 @@ namespace my_tec_course.webapi.Services
             return true;
         }
 
-        public Task<IEnumerable<Course>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Course>> GetAllCoursesAsync()
+        public async Task<IEnumerable<Course>> GetAllAsync()
         {
             return await _courseRepository.GetAllAsync();
         }
 
-        public Task<Course> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public async Task<Course> GetCourseByIdAsync(int id)
+        public async Task<Course> GetByIdAsync(int id)
         {
             return await _courseRepository.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException($"Course with ID {id} not found.");
         }
 
-        public Task<Course> UpdateAsync(Course entity)
-        {
-            throw new NotImplementedException();
-        }
 
-        public async Task<Course> UpdateCourseAsync(Course course)
+        public async Task<Course> UpdateAsync(Course course)
         {
             if (course == null)
             {
@@ -76,9 +59,8 @@ namespace my_tec_course.webapi.Services
 
             var existingCourse = await _courseRepository.GetByIdAsync(course.id)
                 ?? throw new KeyNotFoundException($"Course with ID {course.id} not found.");
+
             return await _courseRepository.UpdateAsync(course);
         }
-
-
     }
 }
