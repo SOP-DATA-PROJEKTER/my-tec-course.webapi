@@ -25,7 +25,7 @@ namespace my_tec_course.webapi.Controllers
             return Ok(await _getAllService.GetAllEducationTypes());
         }
 
-        [HttpGet]
+        [HttpGet("simple")]
         public async Task<IActionResult> GetAllSimple()
         {
             return Ok(await _educationTypeService.GetAllAsync());
@@ -62,6 +62,7 @@ namespace my_tec_course.webapi.Controllers
         {
             try
             {
+
                 return Ok(await _educationTypeService.UpdateAsync(educationType));
             }
             catch (Exception ex)

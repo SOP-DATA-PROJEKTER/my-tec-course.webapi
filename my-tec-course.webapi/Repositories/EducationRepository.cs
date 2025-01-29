@@ -11,6 +11,7 @@ namespace my_tec_course.webapi.Repositories
         {
             _context = context;
         }
+
         public async Task<Education> CreateAsync(Education entity)
         {
             await _context.Educations.AddAsync(entity);
@@ -35,14 +36,12 @@ namespace my_tec_course.webapi.Repositories
             else
                 throw new Exception("No education found");
         }
-
         public async Task<Education> GetByIdAsync(int id)
         {
             var result = await _context.Educations.FindAsync(id);
             return result ?? throw new Exception("Education not found");
 
         }
-
         public async Task<Education> UpdateAsync(Education entity)
         {
             // overwrite old entity with new

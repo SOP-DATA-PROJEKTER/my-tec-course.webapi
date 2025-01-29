@@ -4,6 +4,5 @@ namespace my_tec_course.webapi.Interfaces.Services
 {
     public interface ICourseSubjectService : IGenericCrudService<CourseSubject>
     {
-        Task GetAllCourseSubjectsAsync();
     }
 }
