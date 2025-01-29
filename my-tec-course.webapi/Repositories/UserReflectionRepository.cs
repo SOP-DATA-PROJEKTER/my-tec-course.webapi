@@ -18,7 +18,10 @@ namespace my_tec_course.webapi.Repositories
                 return entity;
             else
                 throw new Exception("An error occurred while creating the Milestone");
+<<<<<<< HEAD
             // test
+=======
+>>>>>>> parent of 6bfc996 (Revert "9 opret services")
         }
 
         public async Task<bool> DeleteAsync(int id)
