@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using my_tec_course.webapi.Interfaces.Repositories;
-<<<<<<< HEAD
-=======
 using my_tec_course.webapi.Interfaces.Services;
->>>>>>> parent of 6bfc996 (Revert "9 opret services")
 using my_tec_course.webapi.Repositories;
 using my_tec_course.webapi.Services;
 
