@@ -21,7 +21,12 @@ namespace my_tec_course.webapi.Services
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            return await _educationTypeRepository.CreateAsync(entity);
+            var newEntity = new EducationType
+            {
+                name = entity.name
+            };
+
+            return await _educationTypeRepository.CreateAsync(newEntity);
         }
 
         public async Task<bool> DeleteAsync(int id)

@@ -23,7 +23,13 @@ namespace my_tec_course.webapi.Services
                 throw new ArgumentException("Course name is required.");
             }
 
-            return await _courseRepository.CreateAsync(course);
+            var newCourse = new Course
+            {
+                name = course.name,
+                courseType = course.courseType,
+            };
+
+            return await _courseRepository.CreateAsync(newCourse);
         }
 
         public Task<bool> DeleteAsync(int id)

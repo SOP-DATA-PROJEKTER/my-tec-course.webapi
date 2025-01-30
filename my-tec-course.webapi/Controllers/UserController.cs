@@ -10,11 +10,12 @@ namespace my_tec_course.webapi.Controllers
     public class UserController : ControllerBase
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UserController(SignInManager<IdentityUser> signInManager)
+        public UserController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
-
+            _userManager = userManager;
         }
 
         [HttpPost("Logout")]
@@ -35,6 +36,18 @@ namespace my_tec_course.webapi.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllUser()
+        {
+            try
+            {
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { Message = "An error occurred during User Fetch", Details = ex.Message });
+            }
+        }
 
     }   
 }

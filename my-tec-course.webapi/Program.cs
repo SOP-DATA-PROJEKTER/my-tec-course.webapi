@@ -22,7 +22,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 builder.Services.AddAuthorization();
 
 builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 // add repository injection
 
@@ -43,8 +44,17 @@ builder.Services.AddScoped<ICourseSubjectService, CourseSubjectService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IGetAllService, GetAllService>();
 
-
-
+// Cors Rules
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
 
 
 builder.Services.AddControllers();
@@ -62,18 +72,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    
-    // CORS rules
-    builder.Services.AddCors(options =>
-    {
-        options.AddDefaultPolicy(
-            builder =>
-            {
-                builder.WithOrigins("*")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-            });
-    });
 }
 
 app.UseCors();

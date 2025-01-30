@@ -19,6 +19,15 @@ namespace my_tec_course.webapi.Services
             {
                 throw new ArgumentNullException(nameof(entity), "CourseSubject cannot be null.");
             }
+
+            var newCourseSubject = new CourseSubject
+            {
+                name = entity.name,
+                teacherName = entity.teacherName,
+                duration = entity.duration,
+                roomName = entity.roomName
+            };
+
             return await _courseSubjectRepository.CreateAsync(entity);
         }
 
@@ -32,13 +41,6 @@ namespace my_tec_course.webapi.Services
 
             return await _courseSubjectRepository.DeleteAsync(id);
         }
-
-        public async Task<IEnumerable<CourseSubject>> GetAllAsync()
-        {
-            return await _courseSubjectRepository.GetAllAsync();
-           
-        }
-
 
         public async Task<CourseSubject> GetByIdAsync(int id)
         {
@@ -67,9 +69,10 @@ namespace my_tec_course.webapi.Services
             return await _courseSubjectRepository.UpdateAsync(entity);
         }
 
-        Task ICourseSubjectService.GetAllCourseSubjectsAsync()
+
+        public async Task<IEnumerable<CourseSubject>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _courseSubjectRepository.GetAllAsync();
         }
     }
 }
