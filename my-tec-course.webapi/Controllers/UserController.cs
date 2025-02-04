@@ -2,6 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using my_tec_course.webapi.Models.Dtos;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace my_tec_course.webapi.Controllers
 {
@@ -17,6 +22,38 @@ namespace my_tec_course.webapi.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
         }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto model)
+        {
+            var user = await _userManager.FindByNameAsync(model.Email);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                return Unauthorized("Invalid credentials");
+            }
+
+            // 🔹 Generer en JWT-token med brugerens Identity ID
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes("your-very-secure-and-long-secret-key!s"); // Skal konfigureres i appsettings
+
+            var claims = new[]
+            {
+            new Claim(ClaimTypes.NameIdentifier, user.Id), // <-- Dette er Identity UserId
+            new Claim(ClaimTypes.Name, user.Email)
+        };
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddHours(1), // Token udløber efter 1 time
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return Ok(new { Token = tokenHandler.WriteToken(token) });        
+        }
+              
+
 
         [HttpPost("Logout")]
         [Authorize]
