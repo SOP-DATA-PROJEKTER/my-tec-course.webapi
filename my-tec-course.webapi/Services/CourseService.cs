@@ -1,35 +1,20 @@
 ﻿using my_tec_course.webapi.Interfaces.Repositories;
 using my_tec_course.webapi.Interfaces.Services;
 using my_tec_course.webapi.Models;
+
 namespace my_tec_course.webapi.Services
 {
-    public class CourseService: ICourseService
+    public class CourseService : IGenericCrudService<Course>
     {
-        private readonly ICourseRepository _courseRepository;
-        public CourseService(ICourseRepository courseRepository)
+        private readonly IGenericCrudRepository<Course> _repository;
+        public CourseService(IGenericCrudRepository<Course> repository)
         {
-            _courseRepository = courseRepository;
+            _repository = repository;
         }
 
-        public async Task<Course> CreateCourseAsync(Course course)
+        public Task<Course> CreateAsync(Course entity)
         {
-            if (course == null)
-            {
-                throw new ArgumentNullException(nameof(course), "Course cannot be null.");
-            }
-
-            if (string.IsNullOrEmpty(course.name))
-            {
-                throw new ArgumentException("Course name is required.");
-            }
-
-            var newCourse = new Course
-            {
-                name = course.name,
-                courseType = course.courseType,
-            };
-
-            return await _courseRepository.CreateAsync(newCourse);
+            throw new NotImplementedException();
         }
 
         public Task<bool> DeleteAsync(int id)
@@ -37,40 +22,19 @@ namespace my_tec_course.webapi.Services
             throw new NotImplementedException();
         }
 
-        public async Task<bool> DeleteCourseAsync(int id)
+        public Task<IEnumerable<Course>> GetAllAsync()
         {
-            if(_courseRepository.GetByIdAsync(id) == null)
-            {
-                throw new KeyNotFoundException($"Course with ID: {id} not found.");
-            }
-            await _courseRepository.DeleteAsync(id);
-            return true;
+            throw new NotImplementedException();
         }
 
-
-        public async Task<IEnumerable<Course>> GetAllCoursesAsync()
+        public Task<Course> GetByIdAsync(int id)
         {
-            return await _courseRepository.GetAllAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task<Course> GetCourseByIdAsync(int id)
+        public Task<Course> UpdateAsync(Course entity)
         {
-            return await _courseRepository.GetByIdAsync(id)
-                ?? throw new KeyNotFoundException($"Course with ID {id} not found.");
+            throw new NotImplementedException();
         }
-
-
-        public async Task<Course> UpdateCourseAsync(Course course)
-        {
-            if (course == null)
-            {
-                throw new ArgumentNullException(nameof(course), "Course cannot be null.");
-            }
-
-            var existingCourse = await _courseRepository.GetByIdAsync(course.id)
-                ?? throw new KeyNotFoundException($"Course with ID {course.id} not found.");
-            return await _courseRepository.UpdateAsync(course);
-        }
-        
     }
 }

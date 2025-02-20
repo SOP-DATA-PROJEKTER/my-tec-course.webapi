@@ -1,6 +1,6 @@
 ﻿namespace my_tec_course.webapi.Interfaces.Repositories
 {
-    public interface ICrudMethods<T> where T : class
+    public interface IGenericCrudRepository<T> where T : class
     {
         // Async CRUD Methods For Repositories
         Task<IEnumerable<T>> GetAllAsync();

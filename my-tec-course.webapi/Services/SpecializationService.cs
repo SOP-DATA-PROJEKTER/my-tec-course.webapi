@@ -4,16 +4,15 @@ using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Services
 {
-    public class MilestoneService : IGenericCrudService<Milestone>
+    public class SpecializationService : IGenericCrudService<Specialization>
     {
-        private readonly IGenericCrudRepository<Milestone> _repository;
-
-        public MilestoneService(IGenericCrudRepository<Milestone> repository)
+        private readonly IGenericCrudRepository<Specialization> _repository;
+        public SpecializationService(IGenericCrudRepository<Specialization> repository)
         {
             _repository = repository;
         }
 
-        public Task<Milestone> CreateAsync(Milestone entity)
+        public Task<Specialization> CreateAsync(Specialization entity)
         {
             throw new NotImplementedException();
         }
@@ -23,17 +22,17 @@ namespace my_tec_course.webapi.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Milestone>> GetAllAsync()
+        public Task<IEnumerable<Specialization>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Milestone> GetByIdAsync(int id)
+        public Task<Specialization> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Milestone> UpdateAsync(Milestone entity)
+        public Task<Specialization> UpdateAsync(Specialization entity)
         {
             throw new NotImplementedException();
         }

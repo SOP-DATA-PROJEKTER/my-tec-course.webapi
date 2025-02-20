@@ -9,13 +9,10 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
         base(options)
     { }
 
-    public DbSet<UserReflection> UserReflections { get; set; }
-    public DbSet<Milestone> Milestones { get; set; }
-    public DbSet<EducationType> EducationTypes { get; set; }
-    public DbSet<Education> Educations { get; set; }
-    public DbSet<CourseTask> CourseTasks { get; set; }
-    public DbSet<CourseSubject> CourseSubjects { get; set; }
-    public DbSet<Course> Courses { get; set; }
-
-
+    DbSet<Course> Courses { get; set; }
+    DbSet<Education> Educations { get; set; }
+    DbSet<Milestone> Milestones { get; set; }
+    DbSet<Pathway> Pathways { get; set; }
+    DbSet<Specialization> Specializations { get; set; }
+    DbSet<Subject> Subjects { get; set; }
 }

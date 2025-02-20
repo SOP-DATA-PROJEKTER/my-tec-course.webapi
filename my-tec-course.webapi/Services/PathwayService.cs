@@ -4,16 +4,15 @@ using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Services
 {
-    public class MilestoneService : IGenericCrudService<Milestone>
+    public class PathwayService : IGenericCrudService<Pathway>
     {
-        private readonly IGenericCrudRepository<Milestone> _repository;
-
-        public MilestoneService(IGenericCrudRepository<Milestone> repository)
+        private readonly IGenericCrudRepository<Pathway> _repository;
+        public PathwayService(IGenericCrudRepository<Pathway> repository)
         {
             _repository = repository;
         }
 
-        public Task<Milestone> CreateAsync(Milestone entity)
+        public Task<Pathway> CreateAsync(Pathway entity)
         {
             throw new NotImplementedException();
         }
@@ -23,17 +22,17 @@ namespace my_tec_course.webapi.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Milestone>> GetAllAsync()
+        public Task<IEnumerable<Pathway>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Milestone> GetByIdAsync(int id)
+        public Task<Pathway> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Milestone> UpdateAsync(Milestone entity)
+        public Task<Pathway> UpdateAsync(Pathway entity)
         {
             throw new NotImplementedException();
         }

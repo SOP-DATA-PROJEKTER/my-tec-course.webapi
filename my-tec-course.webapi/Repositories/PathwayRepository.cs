@@ -3,16 +3,16 @@ using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Repositories
 {
-    public class MilestoneRepository : IGenericCrudRepository<Milestone>
+    public class PathwayRepository : IGenericCrudRepository<Pathway>
     {
         private readonly ApplicationDbContext _context;
 
-        public MilestoneRepository(ApplicationDbContext context)
+        public PathwayRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public Task<Milestone> CreateAsync(Milestone entity)
+        public Task<Pathway> CreateAsync(Pathway entity)
         {
             throw new NotImplementedException();
         }
@@ -22,17 +22,17 @@ namespace my_tec_course.webapi.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Milestone>> GetAllAsync()
+        public Task<IEnumerable<Pathway>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Milestone> GetByIdAsync(int id)
+        public Task<Pathway> GetByIdAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Milestone> UpdateAsync(Milestone entity)
+        public Task<Pathway> UpdateAsync(Pathway entity)
         {
             throw new NotImplementedException();
         }

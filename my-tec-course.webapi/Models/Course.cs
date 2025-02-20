@@ -1,10 +1,13 @@
 ﻿namespace my_tec_course.webapi.Models
 {
+    // Forløb
     public class Course
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string courseType { get; set; }
-        public List<CourseSubject> courseSubjects { get; set; }
+        public int Id { get; set; }
+        public required string Name { get; set; }
+        public string? Description { get; set; }
+        public List<Subject>? Subjects { get; set; } = new();
+        public required Specialization Specialization { get; set; }
+
     }
 }

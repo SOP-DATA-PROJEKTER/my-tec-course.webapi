@@ -4,63 +4,38 @@ using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Services
 {
-    public class EducationService : IEducationService
+    public class EducationService : IGenericCrudService<Education>
     {
-        private readonly IEducationRepository _educationRepository;
+        private readonly IGenericCrudRepository<Education> _repository;
 
-        public EducationService(IEducationRepository educationRepository)
+        public EducationService(IGenericCrudRepository<Education> repository)
         {
-            _educationRepository = educationRepository;
+            _repository = repository;
         }
 
-        public async Task<Education> CreateAsync(Education entity)
+        public Task<Education> CreateAsync(Education entity)
         {
-            // check validity of entity
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-
-            return await _educationRepository.CreateAsync(entity);
-
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public Task<bool> DeleteAsync(int id)
         {
-            // check if id is valid
-            if(_educationRepository.GetByIdAsync(id) == null)
-            {
-                throw new KeyNotFoundException($"Education with ID: {id} not found.");
-            }
-
-            return await _educationRepository.DeleteAsync(id);
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Education>> GetAllAsync()
+        public Task<IEnumerable<Education>> GetAllAsync()
         {
-            return await _educationRepository.GetAllAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task<Education> GetByIdAsync(int id)
+        public Task<Education> GetByIdAsync(int id)
         {
-            return await _educationRepository.GetByIdAsync(id);
+            throw new NotImplementedException();
         }
 
-        public async Task<Education> UpdateAsync(Education entity)
+        public Task<Education> UpdateAsync(Education entity)
         {
-            // check validity of entity
-            if(entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-
-            // check if entity exists
-            if (_educationRepository.GetByIdAsync(entity.id) == null)
-            {
-                throw new KeyNotFoundException($"Education with ID: {entity.id} not found");
-            }
-
-            return await _educationRepository.UpdateAsync(entity);
+            throw new NotImplementedException();
         }
     }
 }

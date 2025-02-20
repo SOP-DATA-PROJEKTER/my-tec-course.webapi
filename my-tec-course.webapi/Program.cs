@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using my_tec_course.webapi.Interfaces.Repositories;
-using my_tec_course.webapi.Interfaces.Services;
+using my_tec_course.webapi.Models;
 using my_tec_course.webapi.Repositories;
-using my_tec_course.webapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 
 
 // Add services to the container.
+builder.Services.AddScoped<IGenericCrudRepository<Education>, EducationRepository>();
 
 
 builder.Services.AddAuthorization();
@@ -27,22 +27,10 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
 
 // add repository injection
 
-builder.Services.AddScoped<IUserReflectionRepository, UserReflectionRepository>();
-builder.Services.AddScoped<IMilestoneRepository, MilestoneRepository>();
-builder.Services.AddScoped<IEducationTypeRepository, EducationTypeRepository>();
-builder.Services.AddScoped<IEducationRepository, EducationRepository>();
-builder.Services.AddScoped<ICourseSubjectRepository, CourseSubectRepository>();
-builder.Services.AddScoped<ICourseRepository, CourseRepository>();
-builder.Services.AddScoped<IGetAllRepository, GetAllRepository>();
+
 
 // add service injection
-builder.Services.AddScoped<IUserReflectionService, UserReflectionService>();
-builder.Services.AddScoped<IMilestoneService, MilestoneService>();
-builder.Services.AddScoped<IEducationTypeService, EducationTypeService>();
-builder.Services.AddScoped<IEducationService, EducationService>();
-builder.Services.AddScoped<ICourseSubjectService, CourseSubjectService>();
-builder.Services.AddScoped<ICourseService, CourseService>();
-builder.Services.AddScoped<IGetAllService, GetAllService>();
+
 
 // Cors Rules
 builder.Services.AddCors(options =>
@@ -57,7 +45,12 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
