@@ -9,77 +9,67 @@ namespace my_tec_course.webapi.Controllers
     [ApiController]
     public class EducationController : ControllerBase
     {
-        private readonly IEducationService _educationService;
+        private readonly IGenericCrudService<Education> _educationService;
 
-        public EducationController(IEducationService educationService)
+        public EducationController(IGenericCrudService<Education> educationService)
         {
             _educationService = educationService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
-            try
+            var educations = await _educationService.GetAllAsync();
+            if(educations == null)
             {
-                return Ok(await _educationService.GetAllAsync());
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(educations);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            try
+            var education = await _educationService.GetByIdAsync(id);
+            if (education == null)
             {
-                return Ok(await _educationService.GetByIdAsync(id));
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(education);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Education education)
+        public async Task<IActionResult> Create(Education education)
         {
-            try
+            var createdEducation = await _educationService.CreateAsync(education);
+            if (createdEducation == null)
             {
-                return Ok(await _educationService.CreateAsync(education));
+                return BadRequest();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(createdEducation);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] Education education)
+        public async Task<IActionResult> Update(Education education)
         {
-            try
+            var updatedEducation = await _educationService.UpdateAsync(education);
+            if (updatedEducation == null)
             {
-                return Ok(await _educationService.UpdateAsync(education));
+                return BadRequest();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(updatedEducation);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
+            var result = await _educationService.DeleteAsync(id);
+            if (!result)
             {
-                await _educationService.DeleteAsync(id);
-                return Ok();
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok();
         }
+
     }
 }

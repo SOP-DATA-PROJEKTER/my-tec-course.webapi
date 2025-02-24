@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using my_tec_course.webapi.Interfaces.Services;
 using my_tec_course.webapi.Models;
+using my_tec_course.webapi.Services;
 
 namespace my_tec_course.webapi.Controllers
 {
@@ -9,65 +10,75 @@ namespace my_tec_course.webapi.Controllers
     [ApiController]
     public class CourseController : ControllerBase
     {
-        private readonly ICourseService _courseService;
 
-        public CourseController(ICourseService courseService)
+        private readonly IGenericCrudService<Course> _courseService;
+        private readonly IGenericCrudService<Specialization> _specializationService;
+
+        public CourseController(CourseService courseService, IGenericCrudService<Specialization> specializationService)
         {
             _courseService = courseService;
+            _specializationService = specializationService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCoursesAsync()
+        public async Task<IActionResult> GetAll()
         {
-            try
+            var courses = await _courseService.GetAllAsync();
+            if (courses == null)
             {
-                var courses = await _courseService.GetAllCoursesAsync();
-                return Ok(courses);
+                return StatusCode(StatusCodes.Status404NotFound);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(courses);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCourseByIdAsync(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            try
+            var course = await _courseService.GetByIdAsync(id);
+            if (course == null)
             {
-                return Ok(await _courseService.GetCourseByIdAsync(id));
+                return StatusCode(StatusCodes.Status404NotFound);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(course);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCourseAsync([FromBody] Course course)
+        public async Task<IActionResult> Post([FromBody] Course course)
         {
-            try
+            var specialization = await _specializationService.GetByIdAsync(course.SpecializationId);
+            if (specialization == null)
             {
-                return Ok(await _courseService.CreateCourseAsync(course));
+                return NotFound("Specialization not found");
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            course.Specialization = specialization;
+            var createdCourse = await _courseService.CreateAsync(course);
+            return Ok(createdCourse);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCourseAsync([FromBody] Course course)
+        public async Task<IActionResult> Put([FromBody] Course course)
         {
-            try
+            var specialization = await _specializationService.GetByIdAsync(course.SpecializationId);
+            if (specialization == null)
             {
-                var updatedCourse = await _courseService.UpdateCourseAsync(course);
-                return Ok(updatedCourse);
+                return NotFound("Specialization not found");
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            course.Specialization = specialization;
+            var updatedCourse = await _courseService.UpdateAsync(course);
+            return Ok(updatedCourse);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var course = await _courseService.GetByIdAsync(id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            await _courseService.DeleteAsync(id);
+            return Ok();
+        }
+
     }
 }

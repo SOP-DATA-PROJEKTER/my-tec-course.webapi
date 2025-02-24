@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using my_tec_course.webapi.Interfaces.Repositories;
+using my_tec_course.webapi.Interfaces.Services;
 using my_tec_course.webapi.Models;
 using my_tec_course.webapi.Repositories;
+using my_tec_course.webapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 
 
 // Add services to the container.
-builder.Services.AddScoped<IGenericCrudRepository<Education>, EducationRepository>();
 
 
 builder.Services.AddAuthorization();
@@ -26,10 +27,22 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddDefaultTokenProviders();
 
 // add repository injection
-
+builder.Services.AddScoped<IGenericCrudRepository<Course>, CourseRepository>();
+builder.Services.AddScoped<IGenericCrudRepository<Education>, EducationRepository>();
+builder.Services.AddScoped<IGenericCrudRepository<Milestone>, MilestoneRepository>();
+builder.Services.AddScoped<IGenericCrudRepository<Pathway>, PathwayRepository>();
+builder.Services.AddScoped<IGenericCrudRepository<Specialization>, SpecializationRepository>();
+builder.Services.AddScoped<IGenericCrudRepository<Subject>, SubjectRepository>();
 
 
 // add service injection
+builder.Services.AddScoped<IGenericCrudService<Course>, CourseService>();
+builder.Services.AddScoped<IGenericCrudService<Education>, EducationService>();
+builder.Services.AddScoped<IGenericCrudService<Milestone>, MilestoneService>();
+builder.Services.AddScoped<IGenericCrudService<Pathway>, PathwayService>();
+builder.Services.AddScoped<IGenericCrudService<Specialization>, SpecializationService>();
+builder.Services.AddScoped<IGenericCrudService<Subject>, SubjectService>();
+
 
 
 // Cors Rules

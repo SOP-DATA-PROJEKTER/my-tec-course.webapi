@@ -5,7 +5,8 @@
     {
         public int Id { get; set; }
         public required string Description { get; set; }
-        public required Subject Subject { get; set; }
+        public Subject? Subject { get; set; }
+        public int SubjectId { get; set; }
 
     }
 }

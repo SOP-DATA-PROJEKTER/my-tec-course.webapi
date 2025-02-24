@@ -13,29 +13,38 @@ namespace my_tec_course.webapi.Services
             _repository = repository;
         }
 
-        public Task<Milestone> CreateAsync(Milestone entity)
+        public async Task<Milestone> CreateAsync(Milestone entity)
         {
-            throw new NotImplementedException();
+            var result = await _repository.CreateAsync(entity);
+            return result ?? throw new Exception("Failed to create milestone");
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _repository.DeleteAsync(id);
+            if(!result)
+            {
+                throw new Exception("Failed to delete milestone");
+            }
+            return result;
         }
 
-        public Task<IEnumerable<Milestone>> GetAllAsync()
+        public async Task<IEnumerable<Milestone>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetAllAsync();
+            return result ?? throw new Exception("Failed to get milestones");
         }
 
-        public Task<Milestone> GetByIdAsync(int id)
+        public async Task<Milestone> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetByIdAsync(id);
+            return result ?? throw new Exception("Failed to get milestone");
         }
 
-        public Task<Milestone> UpdateAsync(Milestone entity)
+        public async Task<Milestone> UpdateAsync(Milestone entity)
         {
-            throw new NotImplementedException();
+            var result = await _repository.UpdateAsync(entity);
+            return result ?? throw new Exception("Failed to update milestone");
         }
     }
 }

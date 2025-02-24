@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using my_tec_course.webapi.Interfaces.Services;
 using my_tec_course.webapi.Models;
+using System.Threading.Tasks;
 
 namespace my_tec_course.webapi.Controllers
 {
@@ -9,63 +10,77 @@ namespace my_tec_course.webapi.Controllers
     [ApiController]
     public class MilestoneController : ControllerBase
     {
-        private readonly IMilestoneService _milestoneService;
+        private readonly IGenericCrudService<Milestone> _milestoneService;
+        private readonly IGenericCrudService<Subject> _subjectService;
 
-        public MilestoneController(IMilestoneService milestoneService)
+        public MilestoneController(IGenericCrudService<Milestone> milestoneService, IGenericCrudService<Subject> subjectService)
         {
             _milestoneService = milestoneService;
+            _subjectService = subjectService;
+
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
+            var milestones = await _milestoneService.GetAllAsync();
+            if(milestones == null)
             {
-                return Ok(await _milestoneService.GetAllAsync());
+                return StatusCode(StatusCodes.Status404NotFound);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(milestones);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            try
+            var milestone = await _milestoneService.GetByIdAsync(id);
+            if (milestone == null)
             {
-                return Ok(await _milestoneService.GetByIdAsync(id));
+                return StatusCode(StatusCodes.Status404NotFound);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return Ok(milestone);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Milestone milestone)
+        public async Task<IActionResult> Post([FromBody] Milestone milestone)
         {
-            try
+            var subject = await _subjectService.GetByIdAsync(milestone.SubjectId);
+            if (subject == null)
             {
-                return Ok(await _milestoneService.CreateAsync(milestone));
+                return BadRequest("Subject not found");
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+
+            milestone.Subject = subject;
+
+            var createdMilestone = await _milestoneService.CreateAsync(milestone);
+            return Ok(createdMilestone);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] Milestone milestone)
+        public async Task<IActionResult> Put([FromBody] Milestone milestone)
         {
-            try
+            var subject = await _subjectService.GetByIdAsync(milestone.SubjectId);
+            if (subject == null)
             {
-                return Ok(await _milestoneService.UpdateAsync(milestone));
+                return BadRequest("Subject not found");
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            milestone.Subject = subject;
+            var updatedMilestone = await _milestoneService.UpdateAsync(milestone);
+            return Ok(updatedMilestone);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deleted = await _milestoneService.DeleteAsync(id);
+            if (!deleted)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+            return Ok();
+        }
+
+
     }
 }

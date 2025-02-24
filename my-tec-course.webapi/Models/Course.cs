@@ -7,7 +7,8 @@
         public required string Name { get; set; }
         public string? Description { get; set; }
         public List<Subject>? Subjects { get; set; } = new();
-        public required Specialization Specialization { get; set; }
+        public Specialization? Specialization { get; set; }
+        public int SpecializationId { get; set; }
 
     }
 }
