@@ -12,29 +12,38 @@ namespace my_tec_course.webapi.Services
             _repository = repository;
         }
 
-        public Task<Specialization> CreateAsync(Specialization entity)
+        public async Task<Specialization> CreateAsync(Specialization entity)
         {
-            throw new NotImplementedException();
+            var result = await _repository.CreateAsync(entity);
+            return result ?? throw new Exception("Failed to create Specialization");
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _repository.DeleteAsync(id);
+            if (!result)
+            {
+                throw new Exception("Failed to delete Specialization");
+            }
+            return result;
         }
 
         public Task<IEnumerable<Specialization>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var result = _repository.GetAllAsync();
+            return result ?? throw new Exception("Failed to get Specializations");
         }
 
-        public Task<Specialization> GetByIdAsync(int id)
+        public async Task<Specialization> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetByIdAsync(id);
+            return result ?? throw new Exception("Failed to get Specialization");
         }
 
-        public Task<Specialization> UpdateAsync(Specialization entity)
+        public async Task<Specialization> UpdateAsync(Specialization entity)
         {
-            throw new NotImplementedException();
+            var result = await _repository.UpdateAsync(entity);
+            return result ?? throw new Exception("Failed to update Specialization");
         }
     }
 }

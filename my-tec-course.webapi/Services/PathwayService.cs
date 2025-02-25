@@ -12,29 +12,35 @@ namespace my_tec_course.webapi.Services
             _repository = repository;
         }
 
-        public Task<Pathway> CreateAsync(Pathway entity)
+        public async Task<Pathway> CreateAsync(Pathway entity)
         {
-            throw new NotImplementedException();
+            var result = await _repository.CreateAsync(entity);
+            return result ?? throw new Exception("Pathway could not be created");
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _repository.DeleteAsync(id);
+            if(!result) throw new Exception("Pathway could not be deleted");
+            return result;
         }
 
-        public Task<IEnumerable<Pathway>> GetAllAsync()
+        public async Task<IEnumerable<Pathway>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetAllAsync();
+            return result ?? throw new Exception("No Pathways found");
         }
 
-        public Task<Pathway> GetByIdAsync(int id)
+        public async Task<Pathway> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetByIdAsync(id);
+            return result ?? throw new Exception("Pathway not found");
         }
 
-        public Task<Pathway> UpdateAsync(Pathway entity)
+        public async Task<Pathway> UpdateAsync(Pathway entity)
         {
-            throw new NotImplementedException();
+            var result = await _repository.UpdateAsync(entity);
+            return result ?? throw new Exception("Pathway could not be updated");
         }
     }
 }

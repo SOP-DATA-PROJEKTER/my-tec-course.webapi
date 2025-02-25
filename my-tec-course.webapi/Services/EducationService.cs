@@ -13,29 +13,38 @@ namespace my_tec_course.webapi.Services
             _repository = repository;
         }
 
-        public Task<Education> CreateAsync(Education entity)
+        public async Task<Education> CreateAsync(Education entity)
         {
-            throw new NotImplementedException();
+            var result = await _repository.CreateAsync(entity);
+            return result ?? throw new Exception("Failed to create education");
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _repository.DeleteAsync(id);
+            if (!result)
+            {
+                throw new Exception("Failed to delete education");
+            }
+            return result;
         }
 
-        public Task<IEnumerable<Education>> GetAllAsync()
+        public async Task<IEnumerable<Education>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetAllAsync();
+            return result ?? throw new Exception("Failed to get all educations");
         }
 
-        public Task<Education> GetByIdAsync(int id)
+        public async Task<Education> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetByIdAsync(id);
+            return result ?? throw new Exception("Failed to get education by id");
         }
 
-        public Task<Education> UpdateAsync(Education entity)
+        public async Task<Education> UpdateAsync(Education entity)
         {
-            throw new NotImplementedException();
+            var result = await _repository.UpdateAsync(entity);
+            return result ?? throw new Exception("Failed to update education");
         }
     }
 }

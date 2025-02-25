@@ -12,29 +12,38 @@ namespace my_tec_course.webapi.Services
             _repository = repository;
         }
 
-        public Task<Course> CreateAsync(Course entity)
+        public async Task<Course> CreateAsync(Course entity)
         {
-            throw new NotImplementedException();
+            var result = await _repository.CreateAsync(entity);
+            return result ?? throw new Exception("Course not created");
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _repository.DeleteAsync(id);
+            if (!result)
+            {
+                throw new Exception("Course not deleted");
+            }
+            return result;
         }
 
-        public Task<IEnumerable<Course>> GetAllAsync()
+        public async Task<IEnumerable<Course>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetAllAsync();
+            return result ?? throw new Exception("Courses not found");
         }
 
-        public Task<Course> GetByIdAsync(int id)
+        public async Task<Course> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _repository.GetByIdAsync(id);
+            return result ?? throw new Exception("Course not found");
         }
 
-        public Task<Course> UpdateAsync(Course entity)
+        public async Task<Course> UpdateAsync(Course entity)
         {
-            throw new NotImplementedException();
+            var result = await _repository.UpdateAsync(entity);
+            return result ?? throw new Exception("Course not updated");
         }
     }
 }
