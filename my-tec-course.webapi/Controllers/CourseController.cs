@@ -11,10 +11,10 @@ namespace my_tec_course.webapi.Controllers
     public class CourseController : ControllerBase
     {
 
-        private readonly IGenericCrudService<Course> _courseService;
-        private readonly IGenericCrudService<Specialization> _specializationService;
+        private readonly IBaseService<Course> _courseService;
+        private readonly IBaseService<Specialization> _specializationService;
 
-        public CourseController(CourseService courseService, IGenericCrudService<Specialization> specializationService)
+        public CourseController(IBaseService<Course> courseService, IBaseService<Specialization> specializationService)
         {
             _courseService = courseService;
             _specializationService = specializationService;
@@ -24,6 +24,17 @@ namespace my_tec_course.webapi.Controllers
         public async Task<IActionResult> GetAll()
         {
             var courses = await _courseService.GetAllAsync();
+            if (courses == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+            return Ok(courses);
+        }
+
+        [HttpGet("parent/{id}")]
+        public async Task<IActionResult> GetAllFromParent(int id)
+        {
+            var courses = await _courseService.GetAllFromParentAsync(id);
             if (courses == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);

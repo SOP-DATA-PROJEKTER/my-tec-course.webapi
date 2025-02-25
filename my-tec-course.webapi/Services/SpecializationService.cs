@@ -4,10 +4,10 @@ using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Services
 {
-    public class SpecializationService : IGenericCrudService<Specialization>
+    public class SpecializationService : IBaseService<Specialization>
     {
-        private readonly IGenericCrudRepository<Specialization> _repository;
-        public SpecializationService(IGenericCrudRepository<Specialization> repository)
+        private readonly IBaseRepository<Specialization> _repository;
+        public SpecializationService(IBaseRepository<Specialization> repository)
         {
             _repository = repository;
         }
@@ -31,6 +31,12 @@ namespace my_tec_course.webapi.Services
         public Task<IEnumerable<Specialization>> GetAllAsync()
         {
             var result = _repository.GetAllAsync();
+            return result ?? throw new Exception("Failed to get Specializations");
+        }
+
+        public async Task<IEnumerable<Specialization>> GetAllFromParentAsync(int parentId)
+        {
+            var result = await _repository.GetAllFromParentAsync(parentId);
             return result ?? throw new Exception("Failed to get Specializations");
         }
 

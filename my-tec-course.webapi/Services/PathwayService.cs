@@ -4,10 +4,10 @@ using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Services
 {
-    public class PathwayService : IGenericCrudService<Pathway>
+    public class PathwayService : IBaseService<Pathway>
     {
-        private readonly IGenericCrudRepository<Pathway> _repository;
-        public PathwayService(IGenericCrudRepository<Pathway> repository)
+        private readonly IBaseRepository<Pathway> _repository;
+        public PathwayService(IBaseRepository<Pathway> repository)
         {
             _repository = repository;
         }
@@ -28,6 +28,12 @@ namespace my_tec_course.webapi.Services
         public async Task<IEnumerable<Pathway>> GetAllAsync()
         {
             var result = await _repository.GetAllAsync();
+            return result ?? throw new Exception("No Pathways found");
+        }
+
+        public async Task<IEnumerable<Pathway>> GetAllFromParentAsync(int parentId)
+        {
+            var result = await _repository.GetAllFromParentAsync(parentId);
             return result ?? throw new Exception("No Pathways found");
         }
 

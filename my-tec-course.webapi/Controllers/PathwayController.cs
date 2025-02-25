@@ -10,10 +10,10 @@ namespace my_tec_course.webapi.Controllers
     public class PathwayController : ControllerBase
     {
 
-        private readonly IGenericCrudService<Pathway> _pathwayService;
-        private readonly IGenericCrudService<Education> _educationService;
+        private readonly IBaseService<Pathway> _pathwayService;
+        private readonly IBaseService<Education> _educationService;
 
-        public PathwayController(IGenericCrudService<Pathway> pathwayService, IGenericCrudService<Education> educationService)
+        public PathwayController(IBaseService<Pathway> pathwayService, IBaseService<Education> educationService)
         {
             _pathwayService = pathwayService;
             _educationService = educationService;
@@ -24,6 +24,17 @@ namespace my_tec_course.webapi.Controllers
         {
             var pathways = await _pathwayService.GetAllAsync();
             if(pathways == null)
+            {
+                return NotFound();
+            }
+            return Ok(pathways);
+        }
+
+        [HttpGet("parent/{id}")]
+        public async Task<IActionResult> GetAllFromParent(int id)
+        {
+            var pathways = await _pathwayService.GetAllFromParentAsync(id);
+            if (pathways == null)
             {
                 return NotFound();
             }

@@ -1,9 +1,10 @@
-﻿using my_tec_course.webapi.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using my_tec_course.webapi.Interfaces.Repositories;
 using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Repositories
 {
-    public class SpecializationRepository : IGenericCrudRepository<Specialization>
+    public class SpecializationRepository : IBaseRepository<Specialization>
     {
 
         private readonly ApplicationDbContext _context;
@@ -13,29 +14,59 @@ namespace my_tec_course.webapi.Repositories
             _context = context;
         }
 
-        public Task<Specialization> CreateAsync(Specialization entity)
+        public async Task<Specialization> CreateAsync(Specialization entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _context.Specializations.AddAsync(entity);
+                if (await _context.SaveChangesAsync() > 0)
+                    throw new Exception("Error creating Specialization");
+                return result.Entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Specializations.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.SaveChangesAsync() > 0;
+
         }
 
-        public Task<IEnumerable<Specialization>> GetAllAsync()
+        public async Task<IEnumerable<Specialization>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var entities = await _context.Specializations.ToListAsync();
+            return entities;
+        }
+
+        public async Task<IEnumerable<Specialization>> GetAllFromParentAsync(int parentId)
+        {
+            return await _context.Specializations.Where(x => x.PathwayId == parentId).ToListAsync();
         }
 
         public Task<Specialization> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = _context.Specializations.FirstOrDefaultAsync(x => x.Id == id);
+            return entity;
         }
 
-        public Task<Specialization> UpdateAsync(Specialization entity)
+        public async Task<Specialization> UpdateAsync(Specialization entity)
         {
-            throw new NotImplementedException();
+            var storedEntity = await GetByIdAsync(entity.Id) ?? throw new Exception("Entity not found");
+
+            try
+            {
+                _context.Entry(storedEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return storedEntity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

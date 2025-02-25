@@ -4,10 +4,10 @@ using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Services
 {
-    public class CourseService : IGenericCrudService<Course>
+    public class CourseService : IBaseService<Course>
     {
-        private readonly IGenericCrudRepository<Course> _repository;
-        public CourseService(IGenericCrudRepository<Course> repository)
+        private readonly IBaseRepository<Course> _repository;
+        public CourseService(IBaseRepository<Course> repository)
         {
             _repository = repository;
         }
@@ -31,6 +31,12 @@ namespace my_tec_course.webapi.Services
         public async Task<IEnumerable<Course>> GetAllAsync()
         {
             var result = await _repository.GetAllAsync();
+            return result ?? throw new Exception("Courses not found");
+        }
+
+        public async Task<IEnumerable<Course>> GetAllFromParentAsync(int parentId)
+        {
+            var result = await _repository.GetAllFromParentAsync(parentId);
             return result ?? throw new Exception("Courses not found");
         }
 

@@ -1,9 +1,10 @@
-﻿using my_tec_course.webapi.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using my_tec_course.webapi.Interfaces.Repositories;
 using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Repositories
 {
-    public class MilestoneRepository : IGenericCrudRepository<Milestone>
+    public class MilestoneRepository : IBaseRepository<Milestone>
     {
         private readonly ApplicationDbContext _context;
 
@@ -12,29 +13,64 @@ namespace my_tec_course.webapi.Repositories
             _context = context;
         }
 
-        public Task<Milestone> CreateAsync(Milestone entity)
+        public async Task<Milestone> CreateAsync(Milestone entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var subject = await _context.Subjects.FindAsync(entity.SubjectId) ?? throw new Exception("Subject not found");
+                entity.Subject = subject;
+
+                var milestone = await _context.Milestones.AddAsync(entity);
+
+                await _context.SaveChangesAsync();
+                return milestone.Entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Milestones.FindAsync(id);
+            if (entity == null)
+                return false;
+
+            _context.Remove(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<IEnumerable<Milestone>> GetAllAsync()
+        public async Task<IEnumerable<Milestone>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Milestones.ToListAsync();
+
         }
 
-        public Task<Milestone> GetByIdAsync(int id)
+        public async Task<IEnumerable<Milestone>> GetAllFromParentAsync(int parentId)
         {
-            throw new NotImplementedException();
+            return await _context.Milestones.Where(x => x.SubjectId == parentId).ToListAsync();
         }
 
-        public Task<Milestone> UpdateAsync(Milestone entity)
+        public async Task<Milestone> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Milestones.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Milestone> UpdateAsync(Milestone entity)
+        {
+            var storedEntity = await GetByIdAsync(entity.Id) ?? throw new Exception("Entity not found");
+
+            try
+            {
+                _context.Entry(storedEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return storedEntity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

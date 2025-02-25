@@ -4,11 +4,11 @@ using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Services
 {
-    public class MilestoneService : IGenericCrudService<Milestone>
+    public class MilestoneService : IBaseService<Milestone>
     {
-        private readonly IGenericCrudRepository<Milestone> _repository;
+        private readonly IBaseRepository<Milestone> _repository;
 
-        public MilestoneService(IGenericCrudRepository<Milestone> repository)
+        public MilestoneService(IBaseRepository<Milestone> repository)
         {
             _repository = repository;
         }
@@ -32,6 +32,12 @@ namespace my_tec_course.webapi.Services
         public async Task<IEnumerable<Milestone>> GetAllAsync()
         {
             var result = await _repository.GetAllAsync();
+            return result ?? throw new Exception("Failed to get milestones");
+        }
+
+        public async Task<IEnumerable<Milestone>> GetAllFromParentAsync(int parentId)
+        {
+            var result = await _repository.GetAllFromParentAsync(parentId);
             return result ?? throw new Exception("Failed to get milestones");
         }
 

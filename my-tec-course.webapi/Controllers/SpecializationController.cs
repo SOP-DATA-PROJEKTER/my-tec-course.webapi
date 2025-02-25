@@ -10,10 +10,10 @@ namespace my_tec_course.webapi.Controllers
     public class SpecializationController : ControllerBase
     {
 
-        private readonly IGenericCrudService<Specialization> _specializationService;
-        private readonly IGenericCrudService<Pathway> _pathwayService;
+        private readonly IBaseService<Specialization> _specializationService;
+        private readonly IBaseService<Pathway> _pathwayService;
 
-        public SpecializationController(IGenericCrudService<Specialization> specializationService, IGenericCrudService<Pathway> pathwayService)
+        public SpecializationController(IBaseService<Specialization> specializationService, IBaseService<Pathway> pathwayService)
         {
             _specializationService = specializationService;
             _pathwayService = pathwayService;
@@ -24,6 +24,17 @@ namespace my_tec_course.webapi.Controllers
         {
             var specializations = await _specializationService.GetAllAsync();
             if(specializations == null)
+            {
+                return NotFound();
+            }
+            return Ok(specializations);
+        }
+
+        [HttpGet("parent/{id}")]
+        public async Task<IActionResult> GetAllFromParent(int id)
+        {
+            var specializations = await _specializationService.GetAllFromParentAsync(id);
+            if (specializations == null)
             {
                 return NotFound();
             }
@@ -71,7 +82,7 @@ namespace my_tec_course.webapi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _specializationService.DeleteAsync(id);
-            if (result == null)
+            if (!result)
             {
                 return NotFound();
             }

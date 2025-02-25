@@ -1,9 +1,10 @@
-﻿using my_tec_course.webapi.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using my_tec_course.webapi.Interfaces.Repositories;
 using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Repositories
 {
-    public class SubjectRepository : IGenericCrudRepository<Subject>
+    public class SubjectRepository : IBaseRepository<Subject>
     {
         private readonly ApplicationDbContext _context;
 
@@ -12,29 +13,63 @@ namespace my_tec_course.webapi.Repositories
             _context = context;
         }
 
-        public Task<Subject> CreateAsync(Subject entity)
+        public async Task<Subject> CreateAsync(Subject entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var course = await _context.Courses.FindAsync(entity.CourseId) ?? throw new Exception("Course not found");
+                entity.Course = course;
+
+                var subject = await _context.Subjects.AddAsync(entity);
+
+                await _context.SaveChangesAsync();
+                return subject.Entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Subjects.FindAsync(id);
+            if (entity == null)
+                return false;
+
+            _context.Remove(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<IEnumerable<Subject>> GetAllAsync()
+        public async Task<IEnumerable<Subject>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Subjects.ToListAsync();
         }
 
-        public Task<Subject> GetByIdAsync(int id)
+        public async Task<IEnumerable<Subject>> GetAllFromParentAsync(int parentId)
         {
-            throw new NotImplementedException();
+            return await _context.Subjects.Where(x => x.CourseId == parentId).ToListAsync();
         }
 
-        public Task<Subject> UpdateAsync(Subject entity)
+        public async Task<Subject> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Subjects.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Subject> UpdateAsync(Subject entity)
+        {
+            var storedEntity = await GetByIdAsync(entity.Id) ?? throw new Exception("Entity not found");
+
+            try
+            {
+                _context.Entry(storedEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return storedEntity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

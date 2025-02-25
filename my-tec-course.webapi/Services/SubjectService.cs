@@ -4,10 +4,10 @@ using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Services
 {
-    public class SubjectService : IGenericCrudService<Subject>
+    public class SubjectService : IBaseService<Subject>
     {
-        private readonly IGenericCrudRepository<Subject> _repository;
-        public SubjectService(IGenericCrudRepository<Subject> repository)
+        private readonly IBaseRepository<Subject> _repository;
+        public SubjectService(IBaseRepository<Subject> repository)
         {
             _repository = repository;
         }
@@ -31,6 +31,12 @@ namespace my_tec_course.webapi.Services
         public async Task<IEnumerable<Subject>> GetAllAsync()
         {
             var result = await _repository.GetAllAsync();
+            return result ?? throw new Exception("Failed to get subjects");
+        }
+
+        public async Task<IEnumerable<Subject>> GetAllFromParentAsync(int parentId)
+        {
+            var result = await _repository.GetAllFromParentAsync(parentId);
             return result ?? throw new Exception("Failed to get subjects");
         }
 

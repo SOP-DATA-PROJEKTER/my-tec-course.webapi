@@ -38,7 +38,7 @@ namespace my_tec_course.webapi.Services
         public async Task<Education> GetByIdAsync(int id)
         {
             var result = await _repository.GetByIdAsync(id);
-            return result ?? throw new Exception("Failed to get education by id");
+            return result;
         }
 
         public async Task<Education> UpdateAsync(Education entity)

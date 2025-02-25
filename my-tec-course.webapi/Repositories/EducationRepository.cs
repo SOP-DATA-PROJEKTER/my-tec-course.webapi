@@ -1,4 +1,5 @@
-﻿using my_tec_course.webapi.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using my_tec_course.webapi.Interfaces.Repositories;
 using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Repositories
@@ -12,29 +13,67 @@ namespace my_tec_course.webapi.Repositories
             _context = context;
         }
 
-        public Task<Education> CreateAsync(Education entity)
+        public async Task<Education> CreateAsync(Education entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _context.Educations.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return result.Entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Educations.FindAsync(id);
+            if(entity == null)
+                return false;
+
+            _context.Educations.Remove(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<IEnumerable<Education>> GetAllAsync()
+        public async Task<IEnumerable<Education>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Educations
+                .Include(p => p.Pathways)
+                .ThenInclude(s => s.Specializations)
+                .ThenInclude(c => c.Courses)
+                .ThenInclude(s => s.Subjects)
+                .ThenInclude(m => m.Milestones)
+                .ToListAsync();
         }
 
-        public Task<Education> GetByIdAsync(int id)
+        public async Task<Education> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Educations
+                .Include(p => p.Pathways)
+                .ThenInclude(s => s.Specializations)
+                .ThenInclude(c => c.Courses)
+                .ThenInclude(s => s.Subjects)
+                .ThenInclude(m => m.Milestones)
+                .FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public Task<Education> UpdateAsync(Education entity)
+        public async Task<Education> UpdateAsync(Education entity)
         {
-            throw new NotImplementedException();
+            var storedEntity = await GetByIdAsync(entity.Id) ?? throw new Exception("Entity not found");
+
+            try
+            {
+                _context.Entry(storedEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return storedEntity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

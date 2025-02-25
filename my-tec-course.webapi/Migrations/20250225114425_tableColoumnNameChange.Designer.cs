@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace my_tec_course.webapi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250128072044_init")]
-    partial class init
+    [Migration("20250225114425_tableColoumnNameChange")]
+    partial class tableColoumnNameChange
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -224,168 +224,144 @@ namespace my_tec_course.webapi.Migrations
 
             modelBuilder.Entity("my_tec_course.webapi.Models.Course", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Educationid")
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SpecializationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("courseType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("Id");
 
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("Educationid");
+                    b.HasIndex("SpecializationId");
 
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("my_tec_course.webapi.Models.CourseSubject", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<int?>("Courseid")
-                        .HasColumnType("int");
-
-                    b.Property<double>("duration")
-                        .HasColumnType("float");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("roomName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("teacherName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("Courseid");
-
-                    b.ToTable("CourseSubjects");
-                });
-
-            modelBuilder.Entity("my_tec_course.webapi.Models.CourseTask", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<int?>("CourseSubjectid")
-                        .HasColumnType("int");
-
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("CourseSubjectid");
-
-                    b.ToTable("CourseTasks");
-                });
-
             modelBuilder.Entity("my_tec_course.webapi.Models.Education", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("EducationTypeid")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
-
-                    b.HasIndex("EducationTypeid");
+                    b.HasKey("Id");
 
                     b.ToTable("Educations");
                 });
 
-            modelBuilder.Entity("my_tec_course.webapi.Models.EducationType", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("EducationTypes");
-                });
-
             modelBuilder.Entity("my_tec_course.webapi.Models.Milestone", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CourseSubjectid")
-                        .HasColumnType("int");
-
-                    b.Property<string>("description")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("CourseSubjectid");
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("Milestones");
                 });
 
-            modelBuilder.Entity("my_tec_course.webapi.Models.UserReflection", b =>
+            modelBuilder.Entity("my_tec_course.webapi.Models.Pathway", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("courseId")
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EducationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("reflectionText")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.ToTable("UserReflections");
+                    b.HasIndex("EducationId");
+
+                    b.ToTable("Pathways");
+                });
+
+            modelBuilder.Entity("my_tec_course.webapi.Models.Specialization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PathwayId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PathwayId");
+
+                    b.ToTable("Specializations");
+                });
+
+            modelBuilder.Entity("my_tec_course.webapi.Models.Subject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -441,59 +417,82 @@ namespace my_tec_course.webapi.Migrations
 
             modelBuilder.Entity("my_tec_course.webapi.Models.Course", b =>
                 {
-                    b.HasOne("my_tec_course.webapi.Models.Education", null)
-                        .WithMany("courses")
-                        .HasForeignKey("Educationid");
-                });
+                    b.HasOne("my_tec_course.webapi.Models.Specialization", "Specialization")
+                        .WithMany("Courses")
+                        .HasForeignKey("SpecializationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("my_tec_course.webapi.Models.CourseSubject", b =>
-                {
-                    b.HasOne("my_tec_course.webapi.Models.Course", null)
-                        .WithMany("courseSubjects")
-                        .HasForeignKey("Courseid");
-                });
-
-            modelBuilder.Entity("my_tec_course.webapi.Models.CourseTask", b =>
-                {
-                    b.HasOne("my_tec_course.webapi.Models.CourseSubject", null)
-                        .WithMany("courseTasks")
-                        .HasForeignKey("CourseSubjectid");
-                });
-
-            modelBuilder.Entity("my_tec_course.webapi.Models.Education", b =>
-                {
-                    b.HasOne("my_tec_course.webapi.Models.EducationType", null)
-                        .WithMany("educations")
-                        .HasForeignKey("EducationTypeid");
+                    b.Navigation("Specialization");
                 });
 
             modelBuilder.Entity("my_tec_course.webapi.Models.Milestone", b =>
                 {
-                    b.HasOne("my_tec_course.webapi.Models.CourseSubject", null)
-                        .WithMany("milestones")
-                        .HasForeignKey("CourseSubjectid");
+                    b.HasOne("my_tec_course.webapi.Models.Subject", "Subject")
+                        .WithMany("Milestones")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("my_tec_course.webapi.Models.Pathway", b =>
+                {
+                    b.HasOne("my_tec_course.webapi.Models.Education", "Education")
+                        .WithMany("Pathways")
+                        .HasForeignKey("EducationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Education");
+                });
+
+            modelBuilder.Entity("my_tec_course.webapi.Models.Specialization", b =>
+                {
+                    b.HasOne("my_tec_course.webapi.Models.Pathway", "Pathway")
+                        .WithMany("Specializations")
+                        .HasForeignKey("PathwayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pathway");
+                });
+
+            modelBuilder.Entity("my_tec_course.webapi.Models.Subject", b =>
+                {
+                    b.HasOne("my_tec_course.webapi.Models.Course", "Course")
+                        .WithMany("Subjects")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("my_tec_course.webapi.Models.Course", b =>
                 {
-                    b.Navigation("courseSubjects");
-                });
-
-            modelBuilder.Entity("my_tec_course.webapi.Models.CourseSubject", b =>
-                {
-                    b.Navigation("courseTasks");
-
-                    b.Navigation("milestones");
+                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("my_tec_course.webapi.Models.Education", b =>
                 {
-                    b.Navigation("courses");
+                    b.Navigation("Pathways");
                 });
 
-            modelBuilder.Entity("my_tec_course.webapi.Models.EducationType", b =>
+            modelBuilder.Entity("my_tec_course.webapi.Models.Pathway", b =>
                 {
-                    b.Navigation("educations");
+                    b.Navigation("Specializations");
+                });
+
+            modelBuilder.Entity("my_tec_course.webapi.Models.Specialization", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("my_tec_course.webapi.Models.Subject", b =>
+                {
+                    b.Navigation("Milestones");
                 });
 #pragma warning restore 612, 618
         }

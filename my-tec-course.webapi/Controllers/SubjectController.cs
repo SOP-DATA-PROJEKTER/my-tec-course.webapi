@@ -9,10 +9,10 @@ namespace my_tec_course.webapi.Controllers
     [ApiController]
     public class SubjectController : ControllerBase
     {
-        private readonly IGenericCrudService<Subject> _subjectService;
-        private readonly IGenericCrudService<Course> _courseService;
+        private readonly IBaseService<Subject> _subjectService;
+        private readonly IBaseService<Course> _courseService;
 
-        public SubjectController(IGenericCrudService<Subject> subjectService, IGenericCrudService<Course> courseService)
+        public SubjectController(IBaseService<Subject> subjectService, IBaseService<Course> courseService)
         {
             _subjectService = subjectService;
             _courseService = courseService;
@@ -22,6 +22,17 @@ namespace my_tec_course.webapi.Controllers
         public async Task<IActionResult> GetAll()
         {
             var subjects = await _subjectService.GetAllAsync();
+            if (subjects == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+            return Ok(subjects);
+        }
+
+        [HttpGet("parent/{id}")]
+        public async Task<IActionResult> GetAllFromParent(int id)
+        {
+            var subjects = await _subjectService.GetAllFromParentAsync(id);
             if (subjects == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);

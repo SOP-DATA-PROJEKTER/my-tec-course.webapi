@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace my_tec_course.webapi.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class newModels : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,30 +51,17 @@ namespace my_tec_course.webapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EducationTypes",
+                name: "Educations",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EducationTypes", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserReflections",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    courseId = table.Column<int>(type: "int", nullable: false),
-                    reflectionText = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserReflections", x => x.id);
+                    table.PrimaryKey("PK_Educations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,103 +171,107 @@ namespace my_tec_course.webapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Educations",
+                name: "Pathways",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EducationTypeid = table.Column<int>(type: "int", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EducationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Educations", x => x.id);
+                    table.PrimaryKey("PK_Pathways", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Educations_EducationTypes_EducationTypeid",
-                        column: x => x.EducationTypeid,
-                        principalTable: "EducationTypes",
-                        principalColumn: "id");
+                        name: "FK_Pathways_Educations_EducationId",
+                        column: x => x.EducationId,
+                        principalTable: "Educations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Specializations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PathwayId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Specializations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Specializations_Pathways_PathwayId",
+                        column: x => x.PathwayId,
+                        principalTable: "Pathways",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    courseType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Educationid = table.Column<int>(type: "int", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SpecializationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.id);
+                    table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_Educations_Educationid",
-                        column: x => x.Educationid,
-                        principalTable: "Educations",
-                        principalColumn: "id");
+                        name: "FK_Courses_Specializations_SpecializationId",
+                        column: x => x.SpecializationId,
+                        principalTable: "Specializations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CourseSubjects",
+                name: "Subjects",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    teacherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    duration = table.Column<double>(type: "float", nullable: false),
-                    roomName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Courseid = table.Column<int>(type: "int", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CourseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseSubjects", x => x.id);
+                    table.PrimaryKey("PK_Subjects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CourseSubjects_Courses_Courseid",
-                        column: x => x.Courseid,
+                        name: "FK_Subjects_Courses_CourseId",
+                        column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CourseTasks",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CourseSubjectid = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CourseTasks", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_CourseTasks_CourseSubjects_CourseSubjectid",
-                        column: x => x.CourseSubjectid,
-                        principalTable: "CourseSubjects",
-                        principalColumn: "id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Milestones",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CourseSubjectid = table.Column<int>(type: "int", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SubjectId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Milestones", x => x.id);
+                    table.PrimaryKey("PK_Milestones", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Milestones_CourseSubjects_CourseSubjectid",
-                        column: x => x.CourseSubjectid,
-                        principalTable: "CourseSubjects",
-                        principalColumn: "id");
+                        name: "FK_Milestones_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -323,29 +314,29 @@ namespace my_tec_course.webapi.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_Educationid",
+                name: "IX_Courses_SpecializationId",
                 table: "Courses",
-                column: "Educationid");
+                column: "SpecializationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseSubjects_Courseid",
-                table: "CourseSubjects",
-                column: "Courseid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CourseTasks_CourseSubjectid",
-                table: "CourseTasks",
-                column: "CourseSubjectid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Educations_EducationTypeid",
-                table: "Educations",
-                column: "EducationTypeid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Milestones_CourseSubjectid",
+                name: "IX_Milestones_SubjectId",
                 table: "Milestones",
-                column: "CourseSubjectid");
+                column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pathways_EducationId",
+                table: "Pathways",
+                column: "EducationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Specializations_PathwayId",
+                table: "Specializations",
+                column: "PathwayId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subjects_CourseId",
+                table: "Subjects",
+                column: "CourseId");
         }
 
         /// <inheritdoc />
@@ -367,13 +358,7 @@ namespace my_tec_course.webapi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CourseTasks");
-
-            migrationBuilder.DropTable(
                 name: "Milestones");
-
-            migrationBuilder.DropTable(
-                name: "UserReflections");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -382,16 +367,19 @@ namespace my_tec_course.webapi.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "CourseSubjects");
+                name: "Subjects");
 
             migrationBuilder.DropTable(
                 name: "Courses");
 
             migrationBuilder.DropTable(
-                name: "Educations");
+                name: "Specializations");
 
             migrationBuilder.DropTable(
-                name: "EducationTypes");
+                name: "Pathways");
+
+            migrationBuilder.DropTable(
+                name: "Educations");
         }
     }
 }

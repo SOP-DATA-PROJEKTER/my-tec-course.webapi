@@ -10,10 +10,10 @@ namespace my_tec_course.webapi.Controllers
     [ApiController]
     public class MilestoneController : ControllerBase
     {
-        private readonly IGenericCrudService<Milestone> _milestoneService;
-        private readonly IGenericCrudService<Subject> _subjectService;
+        private readonly IBaseService<Milestone> _milestoneService;
+        private readonly IBaseService<Subject> _subjectService;
 
-        public MilestoneController(IGenericCrudService<Milestone> milestoneService, IGenericCrudService<Subject> subjectService)
+        public MilestoneController(IBaseService<Milestone> milestoneService, IBaseService<Subject> subjectService)
         {
             _milestoneService = milestoneService;
             _subjectService = subjectService;
@@ -25,6 +25,17 @@ namespace my_tec_course.webapi.Controllers
         {
             var milestones = await _milestoneService.GetAllAsync();
             if(milestones == null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+            return Ok(milestones);
+        }
+
+        [HttpGet("parent/{id}")]
+        public async Task<IActionResult> GetAllFromParent(int id)
+        {
+            var milestones = await _milestoneService.GetAllFromParentAsync(id);
+            if (milestones == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }

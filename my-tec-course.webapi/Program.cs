@@ -27,21 +27,23 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddDefaultTokenProviders();
 
 // add repository injection
-builder.Services.AddScoped<IGenericCrudRepository<Course>, CourseRepository>();
 builder.Services.AddScoped<IGenericCrudRepository<Education>, EducationRepository>();
-builder.Services.AddScoped<IGenericCrudRepository<Milestone>, MilestoneRepository>();
-builder.Services.AddScoped<IGenericCrudRepository<Pathway>, PathwayRepository>();
-builder.Services.AddScoped<IGenericCrudRepository<Specialization>, SpecializationRepository>();
-builder.Services.AddScoped<IGenericCrudRepository<Subject>, SubjectRepository>();
+
+builder.Services.AddScoped<IBaseRepository<Course>, CourseRepository>();
+builder.Services.AddScoped<IBaseRepository<Milestone>, MilestoneRepository>();
+builder.Services.AddScoped<IBaseRepository<Pathway>, PathwayRepository>();
+builder.Services.AddScoped<IBaseRepository<Specialization>, SpecializationRepository>();
+builder.Services.AddScoped<IBaseRepository<Subject>, SubjectRepository>();
 
 
 // add service injection
-builder.Services.AddScoped<IGenericCrudService<Course>, CourseService>();
 builder.Services.AddScoped<IGenericCrudService<Education>, EducationService>();
-builder.Services.AddScoped<IGenericCrudService<Milestone>, MilestoneService>();
-builder.Services.AddScoped<IGenericCrudService<Pathway>, PathwayService>();
-builder.Services.AddScoped<IGenericCrudService<Specialization>, SpecializationService>();
-builder.Services.AddScoped<IGenericCrudService<Subject>, SubjectService>();
+
+builder.Services.AddScoped<IBaseService<Course>, CourseService>();
+builder.Services.AddScoped<IBaseService<Milestone>, MilestoneService>();
+builder.Services.AddScoped<IBaseService<Pathway>, PathwayService>();
+builder.Services.AddScoped<IBaseService<Specialization>, SpecializationService>();
+builder.Services.AddScoped<IBaseService<Subject>, SubjectService>();
 
 
 

@@ -1,9 +1,10 @@
-﻿using my_tec_course.webapi.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using my_tec_course.webapi.Interfaces.Repositories;
 using my_tec_course.webapi.Models;
 
 namespace my_tec_course.webapi.Repositories
 {
-    public class PathwayRepository : IGenericCrudRepository<Pathway>
+    public class PathwayRepository : IBaseRepository<Pathway>
     {
         private readonly ApplicationDbContext _context;
 
@@ -12,29 +13,63 @@ namespace my_tec_course.webapi.Repositories
             _context = context;
         }
 
-        public Task<Pathway> CreateAsync(Pathway entity)
+        public async Task<Pathway> CreateAsync(Pathway entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var education = await _context.Educations.FindAsync(entity.EducationId) ?? throw new Exception("Education not found");
+                entity.Education = education;
+
+                var pathway = await _context.Pathways.AddAsync(entity);
+
+                await _context.SaveChangesAsync();
+                return pathway.Entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await _context.Pathways.FindAsync(id);
+            if(entity == null)
+                return false;
+
+            _context.Remove(entity);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public Task<IEnumerable<Pathway>> GetAllAsync()
+        public async Task<IEnumerable<Pathway>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Pathways.ToListAsync();
         }
 
-        public Task<Pathway> GetByIdAsync(int id)
+        public async Task<IEnumerable<Pathway>> GetAllFromParentAsync(int parentId)
         {
-            throw new NotImplementedException();
+            return await _context.Pathways.Where(x => x.EducationId == parentId).ToListAsync();
         }
 
-        public Task<Pathway> UpdateAsync(Pathway entity)
+        public async Task<Pathway> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Pathways.FindAsync(id);
+        }
+
+        public async Task<Pathway> UpdateAsync(Pathway entity)
+        {
+            var storedEntity = await GetByIdAsync(entity.Id) ?? throw new Exception("Entity not found");
+
+            try
+            {
+                _context.Entry(storedEntity).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return storedEntity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }
