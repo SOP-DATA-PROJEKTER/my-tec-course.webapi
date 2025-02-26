@@ -11,13 +11,10 @@ namespace my_tec_course.webapi.Controllers
     public class MilestoneController : ControllerBase
     {
         private readonly IBaseService<Milestone> _milestoneService;
-        private readonly IBaseService<Subject> _subjectService;
 
-        public MilestoneController(IBaseService<Milestone> milestoneService, IBaseService<Subject> subjectService)
+        public MilestoneController(IBaseService<Milestone> milestoneService)
         {
             _milestoneService = milestoneService;
-            _subjectService = subjectService;
-
         }
 
         [HttpGet]
@@ -56,14 +53,6 @@ namespace my_tec_course.webapi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Milestone milestone)
         {
-            var subject = await _subjectService.GetByIdAsync(milestone.SubjectId);
-            if (subject == null)
-            {
-                return BadRequest("Subject not found");
-            }
-
-            milestone.Subject = subject;
-
             var createdMilestone = await _milestoneService.CreateAsync(milestone);
             return Ok(createdMilestone);
         }
@@ -71,12 +60,6 @@ namespace my_tec_course.webapi.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Milestone milestone)
         {
-            var subject = await _subjectService.GetByIdAsync(milestone.SubjectId);
-            if (subject == null)
-            {
-                return BadRequest("Subject not found");
-            }
-            milestone.Subject = subject;
             var updatedMilestone = await _milestoneService.UpdateAsync(milestone);
             return Ok(updatedMilestone);
         }

@@ -59,10 +59,12 @@ namespace my_tec_course.webapi.Repositories
         public async Task<Subject> UpdateAsync(Subject entity)
         {
             var storedEntity = await GetByIdAsync(entity.Id) ?? throw new Exception("Entity not found");
+            var storedCourse = await _context.Courses.FindAsync(entity.CourseId) ?? throw new Exception("Course not found");
 
             try
             {
                 _context.Entry(storedEntity).CurrentValues.SetValues(entity);
+                storedEntity.Course = storedCourse;
                 await _context.SaveChangesAsync();
                 return storedEntity;
             }

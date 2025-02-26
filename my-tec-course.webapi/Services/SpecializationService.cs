@@ -28,9 +28,9 @@ namespace my_tec_course.webapi.Services
             return result;
         }
 
-        public Task<IEnumerable<Specialization>> GetAllAsync()
+        public async Task<IEnumerable<Specialization>> GetAllAsync()
         {
-            var result = _repository.GetAllAsync();
+            var result = await _repository.GetAllAsync();
             return result ?? throw new Exception("Failed to get Specializations");
         }
 

@@ -60,10 +60,12 @@ namespace my_tec_course.webapi.Repositories
         public async Task<Milestone> UpdateAsync(Milestone entity)
         {
             var storedEntity = await GetByIdAsync(entity.Id) ?? throw new Exception("Entity not found");
+            var storedSubject = await _context.Subjects.FindAsync(entity.SubjectId) ?? throw new Exception("Subject not found");
 
             try
             {
                 _context.Entry(storedEntity).CurrentValues.SetValues(entity);
+                storedEntity.Subject = storedSubject;
                 await _context.SaveChangesAsync();
                 return storedEntity;
             }

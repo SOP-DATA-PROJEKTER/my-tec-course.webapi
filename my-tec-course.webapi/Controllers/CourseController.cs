@@ -12,12 +12,10 @@ namespace my_tec_course.webapi.Controllers
     {
 
         private readonly IBaseService<Course> _courseService;
-        private readonly IBaseService<Specialization> _specializationService;
 
-        public CourseController(IBaseService<Course> courseService, IBaseService<Specialization> specializationService)
+        public CourseController(IBaseService<Course> courseService)
         {
             _courseService = courseService;
-            _specializationService = specializationService;
         }
 
         [HttpGet]
@@ -56,12 +54,6 @@ namespace my_tec_course.webapi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Course course)
         {
-            var specialization = await _specializationService.GetByIdAsync(course.SpecializationId);
-            if (specialization == null)
-            {
-                return NotFound("Specialization not found");
-            }
-            course.Specialization = specialization;
             var createdCourse = await _courseService.CreateAsync(course);
             return Ok(createdCourse);
         }
@@ -69,12 +61,6 @@ namespace my_tec_course.webapi.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Course course)
         {
-            var specialization = await _specializationService.GetByIdAsync(course.SpecializationId);
-            if (specialization == null)
-            {
-                return NotFound("Specialization not found");
-            }
-            course.Specialization = specialization;
             var updatedCourse = await _courseService.UpdateAsync(course);
             return Ok(updatedCourse);
         }

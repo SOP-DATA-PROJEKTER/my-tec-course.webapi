@@ -6,25 +6,26 @@ namespace my_tec_course.webapi.Repositories
 {
     public class SpecializationRepository : IBaseRepository<Specialization>
     {
-
         private readonly ApplicationDbContext _context;
 
         public SpecializationRepository(ApplicationDbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<Specialization> CreateAsync(Specialization entity)
         {
             try
             {
-                var result = await _context.Specializations.AddAsync(entity);
-                if (await _context.SaveChangesAsync() > 0)
-                    throw new Exception("Error creating Specialization");
-                return result.Entity;
+                var pathway = await _context.Pathways.FindAsync(entity.PathwayId) ?? throw new Exception("Pathway not found");
+                entity.Pathway = pathway;
+                var specialization = await _context.Specializations.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return specialization.Entity;
             }
             catch (Exception ex)
             {
+
                 throw new Exception(ex.Message);
             }
         }
@@ -47,19 +48,21 @@ namespace my_tec_course.webapi.Repositories
             return await _context.Specializations.Where(x => x.PathwayId == parentId).ToListAsync();
         }
 
-        public Task<Specialization> GetByIdAsync(int id)
+        public async Task<Specialization> GetByIdAsync(int id)
         {
-            var entity = _context.Specializations.FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _context.Specializations.FirstOrDefaultAsync(x => x.Id == id);
             return entity;
         }
 
         public async Task<Specialization> UpdateAsync(Specialization entity)
         {
             var storedEntity = await GetByIdAsync(entity.Id) ?? throw new Exception("Entity not found");
+            var storedPathway = await _context.Pathways.FindAsync(entity.PathwayId) ?? throw new Exception("Pathway not found");
 
             try
             {
                 _context.Entry(storedEntity).CurrentValues.SetValues(entity);
+                storedEntity.Pathway = storedPathway;
                 await _context.SaveChangesAsync();
                 return storedEntity;
             }

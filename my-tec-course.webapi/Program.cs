@@ -12,8 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 // database context
 
 // SQL Server database from appsettings.Development.json & Datacontext
-builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ApplicationDbContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 
@@ -44,6 +44,7 @@ builder.Services.AddScoped<IBaseService<Milestone>, MilestoneService>();
 builder.Services.AddScoped<IBaseService<Pathway>, PathwayService>();
 builder.Services.AddScoped<IBaseService<Specialization>, SpecializationService>();
 builder.Services.AddScoped<IBaseService<Subject>, SubjectService>();
+
 
 
 

@@ -19,9 +19,7 @@ namespace my_tec_course.webapi.Repositories
             {
                 var education = await _context.Educations.FindAsync(entity.EducationId) ?? throw new Exception("Education not found");
                 entity.Education = education;
-
                 var pathway = await _context.Pathways.AddAsync(entity);
-
                 await _context.SaveChangesAsync();
                 return pathway.Entity;
             }
@@ -59,10 +57,11 @@ namespace my_tec_course.webapi.Repositories
         public async Task<Pathway> UpdateAsync(Pathway entity)
         {
             var storedEntity = await GetByIdAsync(entity.Id) ?? throw new Exception("Entity not found");
-
+            var storedEducation = await _context.Educations.FindAsync(entity.EducationId) ?? throw new Exception("Education not found");
             try
             {
                 _context.Entry(storedEntity).CurrentValues.SetValues(entity);
+                storedEntity.Education = storedEducation;
                 await _context.SaveChangesAsync();
                 return storedEntity;
             }

@@ -11,12 +11,9 @@ namespace my_tec_course.webapi.Controllers
     {
 
         private readonly IBaseService<Pathway> _pathwayService;
-        private readonly IBaseService<Education> _educationService;
-
-        public PathwayController(IBaseService<Pathway> pathwayService, IBaseService<Education> educationService)
+        public PathwayController(IBaseService<Pathway> pathwayService)
         {
             _pathwayService = pathwayService;
-            _educationService = educationService;
         }
 
         [HttpGet]
@@ -55,13 +52,6 @@ namespace my_tec_course.webapi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Pathway pathway)
         {
-            var education = await _educationService.GetByIdAsync(pathway.EducationId);
-            if(education == null)
-            {
-                return NotFound("Education Not Found");
-            }
-            pathway.Education = education;
-
             var createdPathway = await _pathwayService.CreateAsync(pathway);
             if(createdPathway == null)
             {
@@ -73,13 +63,6 @@ namespace my_tec_course.webapi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Pathway pathway)
         {
-            var education = await _educationService.GetByIdAsync(pathway.EducationId);
-            if (education == null)
-            {
-                return NotFound("Education Not Found");
-            }
-            pathway.Education = education;
-
             var updatedPathway = await _pathwayService.UpdateAsync(pathway);
             if (updatedPathway == null)
             {

@@ -10,12 +10,10 @@ namespace my_tec_course.webapi.Controllers
     public class SubjectController : ControllerBase
     {
         private readonly IBaseService<Subject> _subjectService;
-        private readonly IBaseService<Course> _courseService;
 
-        public SubjectController(IBaseService<Subject> subjectService, IBaseService<Course> courseService)
+        public SubjectController(IBaseService<Subject> subjectService)
         {
             _subjectService = subjectService;
-            _courseService = courseService;
         }
 
         [HttpGet]
@@ -54,12 +52,6 @@ namespace my_tec_course.webapi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Subject subject)
         {
-            var course = await _courseService.GetByIdAsync(subject.CourseId);
-            if (course == null)
-            {
-                return BadRequest("Course not found");
-            }
-            subject.Course = course;
             var createdSubject = await _subjectService.CreateAsync(subject);
             return Ok(createdSubject);
         }
@@ -67,12 +59,6 @@ namespace my_tec_course.webapi.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Subject subject)
         {
-            var course = await _courseService.GetByIdAsync(subject.CourseId);
-            if (course == null)
-            {
-                return BadRequest("Course not found");
-            }
-            subject.Course = course;
             var updatedSubject = await _subjectService.UpdateAsync(subject);
             return Ok(updatedSubject);
         }

@@ -9,14 +9,10 @@ namespace my_tec_course.webapi.Controllers
     [ApiController]
     public class SpecializationController : ControllerBase
     {
-
         private readonly IBaseService<Specialization> _specializationService;
-        private readonly IBaseService<Pathway> _pathwayService;
-
-        public SpecializationController(IBaseService<Specialization> specializationService, IBaseService<Pathway> pathwayService)
+        public SpecializationController(IBaseService<Specialization> specializationService)
         {
             _specializationService = specializationService;
-            _pathwayService = pathwayService;
         }
 
         [HttpGet]
@@ -55,26 +51,14 @@ namespace my_tec_course.webapi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Specialization specialization)
         {
-            var pathway = await _pathwayService.GetByIdAsync(specialization.PathwayId);
-            if (pathway == null)
-            {
-                return NotFound();
-            }
-            specialization.Pathway = pathway;
-            var newSpecialization = _specializationService.CreateAsync(specialization);
+            var newSpecialization = await _specializationService.CreateAsync(specialization);
             return Ok(newSpecialization);
         }
 
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Specialization specialization)
         {
-            var pathway = await _pathwayService.GetByIdAsync(specialization.PathwayId);
-            if (pathway == null)
-            {
-                return NotFound();
-            }
-            specialization.Pathway = pathway;
-            var updatedSpecialization = _specializationService.UpdateAsync(specialization);
+            var updatedSpecialization = await _specializationService.UpdateAsync(specialization);
             return Ok(updatedSpecialization);
         }
 
